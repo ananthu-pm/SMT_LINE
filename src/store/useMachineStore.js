@@ -1,5 +1,5 @@
 // ──────────────────────────────────────────────────
-//  Zustand Store — Machine State & Sync
+//  Zustand Store — Machine State & Broadcast Sync
 // ──────────────────────────────────────────────────
 
 import { create } from 'zustand';
@@ -9,28 +9,32 @@ import { socket } from '../socket/socket';
 const useMachineStore = create((set, get) => ({
     // ─── State ──────────────────────────────
     machines: machines,
-    activeMachineId: 'solder-paste-printer',
+    activeMachineId: null,        // null = home/overview, string = viewing machine
+    isBroadcasting: false,        // is admin currently broadcasting?
     isConnected: false,
 
     // ─── Actions ────────────────────────────
-    setActiveMachine: (id) => {
-        set({ activeMachineId: id });
-    },
 
-    // Admin broadcasts a machine selection to all users
+    // Admin selects a machine to broadcast
     broadcastMachine: (id) => {
-        set({ activeMachineId: id });
-        socket.emit('SYNC_MACHINE', { machineId: id });
+        set({ activeMachineId: id, isBroadcasting: true });
+        socket.emit('BROADCAST_START', { machineId: id });
     },
 
-    // Update a specific machine's status
-    updateMachineStatus: (machineId, status) => {
-        set((state) => ({
-            machines: state.machines.map((m) =>
-                m.id === machineId ? { ...m, status } : m
-            ),
-        }));
-        socket.emit('UPDATE_STATUS', { machineId, status });
+    // Admin releases control — everyone goes back to overview
+    releaseControl: () => {
+        set({ activeMachineId: null, isBroadcasting: false });
+        socket.emit('RELEASE_CONTROL');
+    },
+
+    // Called when socket receives broadcast from server
+    setActiveMachine: (id) => {
+        set({ activeMachineId: id, isBroadcasting: id !== null });
+    },
+
+    // Reset to overview
+    resetToOverview: () => {
+        set({ activeMachineId: null, isBroadcasting: false });
     },
 
     setConnected: (connected) => {
@@ -40,7 +44,7 @@ const useMachineStore = create((set, get) => ({
     // ─── Computed ───────────────────────────
     getActiveMachine: () => {
         const { machines, activeMachineId } = get();
-        return machines.find((m) => m.id === activeMachineId) || machines[0];
+        return machines.find((m) => m.id === activeMachineId) || null;
     },
 }));
 
@@ -53,16 +57,19 @@ socket.on('disconnect', () => {
     useMachineStore.getState().setConnected(false);
 });
 
-socket.on('SYNC_MACHINE', ({ machineId }) => {
+socket.on('BROADCAST_START', ({ machineId }) => {
     useMachineStore.getState().setActiveMachine(machineId);
 });
 
-socket.on('UPDATE_STATUS', ({ machineId, status }) => {
-    useMachineStore.setState((state) => ({
-        machines: state.machines.map((m) =>
-            m.id === machineId ? { ...m, status } : m
-        ),
-    }));
+socket.on('RELEASE_CONTROL', () => {
+    useMachineStore.getState().resetToOverview();
+});
+
+// On initial connect, server sends current state
+socket.on('SYNC_STATE', ({ machineId }) => {
+    if (machineId) {
+        useMachineStore.getState().setActiveMachine(machineId);
+    }
 });
 
 export default useMachineStore;

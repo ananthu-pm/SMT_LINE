@@ -1,6 +1,6 @@
 // ──────────────────────────────────────────────────
 //  SMT Digital Twin — Socket.io Server
-//  Handles SYNC_MACHINE admin broadcasts
+//  Handles BROADCAST_START / RELEASE_CONTROL events
 // ──────────────────────────────────────────────────
 
 import express from 'express';
@@ -18,7 +18,7 @@ const io = new Server(httpServer, {
 });
 
 // ─── In-memory state ──────────────────────────────
-let currentMachineId = 'solder-paste-printer'; // default on startup
+let currentMachineId = null; // null = overview mode
 
 // ─── Health check ─────────────────────────────────
 app.get('/health', (_req, res) => {
@@ -27,33 +27,34 @@ app.get('/health', (_req, res) => {
 
 // ─── Socket.io logic ──────────────────────────────
 io.on('connection', (socket) => {
-    console.log(`✦ Client connected: ${socket.id}`);
+    console.log(`⚡ Client connected: ${socket.id}`);
 
-    // Send the current machine to the newly-connected client
-    socket.emit('SYNC_MACHINE', { machineId: currentMachineId });
-    console.log(`  → Sent current machine "${currentMachineId}" to ${socket.id}`);
+    // Send current state to the newly-connected client
+    socket.emit('SYNC_STATE', { machineId: currentMachineId });
+    console.log(`  → Sent current state (machine: ${currentMachineId || 'overview'}) to ${socket.id}`);
 
-    // Admin broadcasts a machine change
-    socket.on('SYNC_MACHINE', (payload) => {
+    // Admin broadcasts a machine selection to all users
+    socket.on('BROADCAST_START', (payload) => {
         const { machineId } = payload;
         if (!machineId) return;
 
         currentMachineId = machineId;
-        console.log(`✦ Admin broadcast: machine → "${machineId}"`);
+        console.log(`⚡ Admin BROADCAST_START → "${machineId}"`);
 
-        // Broadcast to ALL clients (including the admin, so their preview updates)
-        io.emit('SYNC_MACHINE', { machineId });
+        // Broadcast to ALL clients
+        io.emit('BROADCAST_START', { machineId });
     });
 
-    // Machine status update (for future use — admin can toggle run/idle/error)
-    socket.on('UPDATE_STATUS', (payload) => {
-        const { machineId, status } = payload;
-        console.log(`✦ Status update: ${machineId} → ${status}`);
-        io.emit('UPDATE_STATUS', { machineId, status });
+    // Admin releases control — everyone returns to overview
+    socket.on('RELEASE_CONTROL', () => {
+        currentMachineId = null;
+        console.log(`⚡ Admin RELEASE_CONTROL → overview`);
+
+        io.emit('RELEASE_CONTROL');
     });
 
     socket.on('disconnect', () => {
-        console.log(`✦ Client disconnected: ${socket.id}`);
+        console.log(`⚡ Client disconnected: ${socket.id}`);
     });
 });
 
@@ -62,6 +63,6 @@ const PORT = process.env.PORT || 4000;
 httpServer.listen(PORT, '0.0.0.0', () => {
     console.log(`\n╔══════════════════════════════════════════╗`);
     console.log(`║  SMT Digital Twin Server                 ║`);
-    console.log(`║  Running on http://10.31.184.56:${PORT}     ║`);
+    console.log(`║  Running on http://localhost:${PORT}        ║`);
     console.log(`╚══════════════════════════════════════════╝\n`);
 });

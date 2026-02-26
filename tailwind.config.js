@@ -1,22 +1,38 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {
-                'cyber-bg': '#0a0a0f',
-                'cyber-surface': '#12121a',
-                'cyber-border': '#1e1e2e',
-                'cyber-card': '#16161f',
+                // Dark theme palette
+                'dt-bg': '#0c0c14',
+                'dt-surface': '#13131f',
+                'dt-border': '#1f1f32',
+                'dt-card': '#181828',
+                'dt-text': '#e2e8f0',
+                'dt-muted': '#94a3b8',
+                // Light theme palette
+                'lt-bg': '#f8f9fc',
+                'lt-surface': '#ffffff',
+                'lt-border': '#e2e5ea',
+                'lt-card': '#f1f3f7',
+                'lt-text': '#1e293b',
+                'lt-muted': '#64748b',
+                // Accent colors (shared)
+                'accent-blue': '#3b82f6',
+                'accent-cyan': '#06b6d4',
+                'accent-indigo': '#6366f1',
+                'accent-green': '#22c55e',
+                'accent-red': '#ef4444',
+                'accent-amber': '#f59e0b',
+                'accent-purple': '#a855f7',
+                'accent-orange': '#f97316',
+                // Neons for dark mode
                 'neon-cyan': '#00fff5',
-                'neon-magenta': '#ff00ff',
-                'neon-yellow': '#f0e130',
+                'neon-blue': '#00b4ff',
                 'neon-green': '#39ff14',
                 'neon-red': '#ff3131',
-                'neon-orange': '#ff6600',
-                'status-run': '#39ff14',
-                'status-idle': '#f0e130',
-                'status-error': '#ff3131',
             },
             fontFamily: {
                 heading: ['Orbitron', 'sans-serif'],
@@ -24,34 +40,32 @@ export default {
                 mono: ['JetBrains Mono', 'monospace'],
             },
             boxShadow: {
-                'neon-cyan': '0 0 15px rgba(0, 255, 245, 0.4), 0 0 30px rgba(0, 255, 245, 0.1)',
-                'neon-magenta': '0 0 15px rgba(255, 0, 255, 0.4), 0 0 30px rgba(255, 0, 255, 0.1)',
-                'neon-green': '0 0 15px rgba(57, 255, 20, 0.4)',
-                'neon-red': '0 0 15px rgba(255, 49, 49, 0.4)',
-                'neon-yellow': '0 0 15px rgba(240, 225, 48, 0.4)',
-                'glass': '0 8px 32px rgba(0, 0, 0, 0.4)',
+                'glass': '0 8px 32px rgba(0, 0, 0, 0.12)',
+                'glass-dark': '0 8px 32px rgba(0, 0, 0, 0.5)',
+                'neon-blue': '0 0 20px rgba(0,180,255,0.35), 0 0 40px rgba(0,180,255,0.08)',
+                'neon-cyan': '0 0 15px rgba(0,255,245,0.35)',
+                'card-light': '0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04)',
+                'card-dark': '0 2px 8px rgba(0,0,0,0.4)',
             },
             animation: {
                 'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-                'slide-in': 'slideIn 0.3s ease-out',
+                'slide-up': 'slideUp 0.4s cubic-bezier(0.16,1,0.3,1)',
                 'fade-in': 'fadeIn 0.5s ease-out',
+                'spin-slow': 'spin 8s linear infinite',
             },
             keyframes: {
                 pulseGlow: {
                     '0%, 100%': { opacity: 0.6 },
                     '50%': { opacity: 1 },
                 },
-                slideIn: {
-                    '0%': { transform: 'translateX(-20px)', opacity: 0 },
-                    '100%': { transform: 'translateX(0)', opacity: 1 },
+                slideUp: {
+                    '0%': { transform: 'translateY(20px)', opacity: 0 },
+                    '100%': { transform: 'translateY(0)', opacity: 1 },
                 },
                 fadeIn: {
                     '0%': { opacity: 0 },
                     '100%': { opacity: 1 },
                 },
-            },
-            backdropBlur: {
-                xs: '2px',
             },
         },
     },

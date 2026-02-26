@@ -1,5 +1,5 @@
 /* ──────────────────────────────────────────────────
-   SMT Digital Twin — Cyberpunk Industrial Theme
+   SMT Digital Twin — Dual-Theme Styles
    ────────────────────────────────────────────────── */
 
 @tailwind base;
@@ -19,90 +19,88 @@ html, body, #root {
   overflow: hidden;
 }
 
+/* ─── Dark theme (default) ─────────────────────── */
+html.dark body {
+  background-color: #0c0c14;
+  color: #e2e8f0;
+}
+
+/* ─── Light theme ─────────────────────────────── */
+html.light body {
+  background-color: #f8f9fc;
+  color: #1e293b;
+}
+
 body {
-  background-color: #0a0a0f;
-  color: #ffffff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 /* ─── Selection ───────────────────────────────── */
-::selection {
-  background-color: rgba(0, 255, 245, 0.2);
-  color: #00fff5;
+html.dark ::selection {
+  background-color: rgba(0, 180, 255, 0.25);
+  color: #00b4ff;
 }
 
-/* ─── Scrollbar — Cyberpunk style ─────────────── */
+html.light ::selection {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #1d4ed8;
+}
+
+/* ─── Scrollbar ───────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
-::-webkit-scrollbar-track {
-  background: #0a0a0f;
+html.dark ::-webkit-scrollbar-track {
+  background: #0c0c14;
 }
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #00fff5, #ff00ff);
+html.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00b4ff, #6366f1);
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #00fff5, #ff00ff);
-  box-shadow: 0 0 10px rgba(0, 255, 245, 0.4);
+html.light ::-webkit-scrollbar-track {
+  background: #f0f2f5;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #c4c9d4;
+  border-radius: 3px;
 }
 
-/* ─── Glassmorphism utility ───────────────────── */
+/* ─── Glassmorphism ──────────────────────────── */
 @layer utilities {
-  .glass {
-    background: rgba(18, 18, 26, 0.7);
+  .glass-dark {
+    background: rgba(19, 19, 31, 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  .glass-strong {
-    background: rgba(18, 18, 26, 0.85);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  .glass-light {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.06);
   }
 }
 
-/* ─── Neon text glow ──────────────────────────── */
-.neon-text-cyan {
-  color: #00fff5;
-  text-shadow: 0 0 10px rgba(0, 255, 245, 0.5), 0 0 20px rgba(0, 255, 245, 0.2);
-}
-
-.neon-text-magenta {
-  color: #ff00ff;
-  text-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.2);
-}
-
-/* ─── Scan line overlay (optional visual effect) ─ */
-.scan-lines {
-  position: relative;
-}
-
-.scan-lines::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.05) 0px,
-    rgba(0, 0, 0, 0.05) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  pointer-events: none;
-  z-index: 50;
-}
-
-/* ─── Canvas container ────────────────────────── */
+/* ─── Canvas ──────────────────────────────────── */
 canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
+}
+
+/* ─── Neon glow for dark mode ────────────────── */
+html.dark .neon-text {
+  color: #00b4ff;
+  text-shadow: 0 0 10px rgba(0, 180, 255, 0.5), 0 0 20px rgba(0, 180, 255, 0.2);
+}
+
+/* ─── Smooth transitions for themed elements ── */
+.theme-transition {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }

@@ -1,16 +1,17 @@
 <div align="center">
 
-# ⚡ SMT Digital Twin
+# ⚡ SMT Line Digital Twin
 
-### Real-time 3D Monitoring & Synchronized Control for SMT Production Lines
+### Synchronized 3D Monitoring with Master-Follower Architecture
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![Three.js](https://img.shields.io/badge/Three.js-r170-000000?style=flat-square&logo=threedotjs&logoColor=white)](https://threejs.org)
 [![Socket.io](https://img.shields.io/badge/Socket.io-4.8-010101?style=flat-square&logo=socketdotio&logoColor=white)](https://socket.io)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF0055?style=flat-square&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 
-A cyberpunk-themed web application for visualizing and controlling an SMT (Surface Mount Technology) production line through interactive 3D digital twins with real-time synchronization between Admin and User views.
+A dual-theme web application for visualizing and controlling a 15-station SMT production line through interactive 3D digital twins with real-time synchronization between Admin (Master) and User (Follower) views.
 
 </div>
 
@@ -18,25 +19,38 @@ A cyberpunk-themed web application for visualizing and controlling an SMT (Surfa
 
 ## 🚀 Features
 
-- **Interactive 3D Viewport** — Procedural Three.js models for 5 SMT machines with orbit controls, animations, and status-driven glow effects
-- **Admin Dashboard** — Select and broadcast any machine to all connected users in real-time
-- **User Follower Mode** — Automatically syncs to the admin-selected machine with live connection status
-- **OEE Dashboard** — SVG gauge rings displaying Availability, Performance, and Quality metrics per machine
-- **Machine-Specific Data Panels** — Detailed overlays showing parameters like zone temperatures, feeder status, defect breakdowns, and height maps
-- **Real-Time Sync** — Socket.io powered bidirectional communication for instant machine selection and status updates
-- **Cyberpunk UI** — Dark industrial theme with neon glows, glassmorphism, scan-line effects, and custom scrollbars
+- **15 SMT Stations** — Each with a custom `.glb` 3D model, unique specs, and color-coded identity
+- **Master-Follower Architecture** — Admin broadcasts a station → all connected Users instantly transition to that station's 3D view
+- **Dual Theme** — Dark mode (navy/charcoal with neon-blue accents) and Light mode (white studio with professional grey/blue)
+- **Custom 3D Models** — Hand-made `.glb` models loaded via React Three Fiber with auto-scaling and shadow support
+- **Line Overview** — Interactive 3D overview of the entire assembly line on the home page
+- **Smooth Transitions** — Framer Motion animations for view switching, info cards, and UI elements
+- **Real-Time Sync** — Socket.io powered broadcast/release control with live connection status
+- **Release Control** — Admin can release broadcast, returning all followers to the line overview
 
 ---
 
-## 🏭 Machines Modeled
+## 🏭 The 15 Stations
 
-| # | Machine | Model Reference | Status |
-|---|---------|----------------|--------|
-| 1 | **Solder Paste Printer** | DEK Horizon iX | 🟢 Running |
-| 2 | **SPI (Solder Paste Inspection)** | Koh Young Zenith 3D | 🟢 Running |
-| 3 | **Pick & Place (High Speed)** | Yamaha YSM40R | 🟡 Idle |
-| 4 | **Reflow Oven** | Heller 1913 MK5 | 🟢 Running |
-| 5 | **AOI (Automated Optical Inspection)** | Omron VT-S730 3D | 🔴 Error |
+| # | Station | Model | 3D File |
+|---|---------|-------|---------|
+| 1 | **PCBA Magazine Loader** | Automated board feeding | `pcb_magazine_unloader.glb` |
+| 2 | **Link Conveyor 1** | Smooth PCB transfer | `smt_conveyor.glb` |
+| 3 | **Screen Printer** | FUJI / GPX CII | `fuji_gpx-cii_solder_paste_printer.glb` |
+| 4 | **Link Conveyor 2** | Synchronized transfer | `smt_conveyor.glb` |
+| 5 | **Solder Paste Inspection** | KohYoung SPI | `ky8030-2_3d_solder_paste_inspection_machine.glb` |
+| 6 | **Reject Conveyor 1** | Faulty board segregation | `smt_conveyor.glb` |
+| 7 | **Surface Mounter** | FUJI AIMEX III | `fuji_aimex_iii_smd_mounter.glb` |
+| 8 | **Inspection Conveyor** | Visual check station | `smt_conveyor.glb` |
+| 9 | **Pre AOI** | Magic Ray | `aoi_kohyoung.glb` |
+| 10 | **Reject Conveyor 2** | Mid-line reject | `smt_conveyor.glb` |
+| 11 | **Reflow Oven** | Heller 1937 MK 7 | `heller_1936_mk7_wave_soldering_machine.glb` |
+| 12 | **Cooling Conveyor** | Rapid board cooling | `cooling_conveyor.glb` |
+| 13 | **Final AOI** | KohYoung Zenith Alpha | `aoi_kohyoung.glb` |
+| 14 | **Reject Conveyor 3** | Final segregation | `smt_conveyor.glb` |
+| 15 | **Magazine Unloader** | Automated stacking | `pcb_magazine_unloader.glb` |
+
+**Line Overview:** `automated_pcb_assembly_line.glb`
 
 ---
 
@@ -44,11 +58,12 @@ A cyberpunk-themed web application for visualizing and controlling an SMT (Surfa
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend Framework** | React 18 + Vite 6 |
+| **Frontend** | React 18 + Vite 6 |
 | **3D Engine** | Three.js (r170) via React Three Fiber + Drei |
-| **State Management** | Zustand |
-| **Real-Time Communication** | Socket.io (Client + Server) |
-| **Styling** | Tailwind CSS 3.4 with custom cyberpunk theme |
+| **Animations** | Framer Motion |
+| **State** | Zustand |
+| **Real-Time** | Socket.io (Client + Server) |
+| **Styling** | Tailwind CSS 3.4 (dual-theme) |
 | **Routing** | React Router DOM v6 |
 | **Backend** | Node.js + Express |
 | **Fonts** | Orbitron · Inter · JetBrains Mono |
@@ -59,37 +74,40 @@ A cyberpunk-themed web application for visualizing and controlling an SMT (Surfa
 
 ```
 smt-digital-twin/
-├── index.html                  # Entry HTML with meta tags and fonts
-├── package.json                # Frontend dependencies & scripts
+├── index.html                  # Entry HTML (dark class for theme)
+├── package.json                # Dependencies & scripts
 ├── vite.config.js              # Vite config with Socket.io proxy
-├── tailwind.config.js          # Custom cyberpunk theme tokens
+├── tailwind.config.js          # Dual-theme color palettes
 ├── postcss.config.js           # PostCSS plugins
-├── .env                        # Environment variables (Socket URL)
+│
+├── public/
+│   └── models/                 # 9 custom .glb 3D models
 │
 ├── server/
-│   ├── index.js                # Express + Socket.io backend server
+│   ├── index.js                # Express + Socket.io server
 │   └── package.json            # Server dependencies
 │
 └── src/
-    ├── main.jsx                # React entry point
+    ├── main.jsx                # Entry with ThemeProvider
     ├── App.jsx                 # Router: Landing → Admin / User
-    ├── index.css               # Global styles, glassmorphism, neon glows
+    ├── index.css               # Dual-theme styles & glassmorphism
+    │
+    ├── context/
+    │   └── ThemeContext.jsx     # Global Light/Dark theme context
     │
     ├── components/
-    │   ├── MachineModel.jsx    # Procedural 3D geometry per machine type
-    │   ├── Viewport3D.jsx      # R3F Canvas, camera, lighting, stars
-    │   ├── InfoOverlay.jsx     # Machine-specific data panels
-    │   ├── OEEWidget.jsx       # OEE gauge rings (SVG)
-    │   ├── AdminSidebar.jsx    # Machine list + broadcast controls
-    │   ├── StatusBadge.jsx     # Colored status indicator pill
-    │   └── GlowRing.jsx       # Animated torus ring around models
+    │   ├── HomeScene3D.jsx     # 3D line overview (GLB model)
+    │   ├── MachineDetailScene.jsx  # Per-machine GLB 3D view
+    │   ├── MachineInfoCard.jsx # Themed spec overlay card
+    │   ├── AdminSidebar.jsx    # 15-machine list + broadcast
+    │   └── ThemeToggle.jsx     # Sun/Moon toggle button
     │
     ├── views/
-    │   ├── AdminView.jsx       # Admin layout: sidebar + viewport
-    │   └── UserView.jsx        # User layout: full-screen follower
+    │   ├── AdminView.jsx       # Sidebar + 3D + broadcast banner
+    │   └── UserView.jsx        # Full-screen follower mode
     │
     ├── data/
-    │   └── machines.js         # Static data for 5 SMT machines
+    │   └── machines.js         # 15-station database with model paths
     │
     ├── store/
     │   └── useMachineStore.js  # Zustand store + socket listeners
@@ -111,8 +129,8 @@ smt-digital-twin/
 
 ```bash
 # Clone the repository
-git clone https://github.com/ananthu-pm/smt-digital-twin.git
-cd smt-digital-twin
+git clone https://github.com/ananthu-pm/SMT_LINE.git
+cd SMT_LINE
 
 # Install frontend dependencies
 npm install
@@ -129,22 +147,15 @@ Create a `.env` file in the project root:
 VITE_SOCKET_URL=http://localhost:4000
 ```
 
-### Running the Application
+### Running
 
 ```bash
 # Start both frontend and backend concurrently
 npm start
 
-# Or run them individually:
-npm run dev       # Frontend (Vite dev server on port 5173)
-npm run server    # Backend (Socket.io server on port 4000)
-```
-
-### Build for Production
-
-```bash
-npm run build
-npm run preview   # Preview the production build
+# Or individually:
+npm run dev       # Frontend (Vite on port 5173)
+npm run server    # Backend (Socket.io on port 4000)
 ```
 
 ---
@@ -153,29 +164,35 @@ npm run preview   # Preview the production build
 
 | Route | View | Description |
 |-------|------|-------------|
-| `/` | **Landing Page** | Role selection — choose Admin or User |
-| `/admin` | **Admin Dashboard** | Machine list sidebar, broadcast controls, 3D preview, OEE metrics |
-| `/user` | **User View** | Full-screen follower mode with auto-synced machine display |
+| `/` | **Landing** | Role selection — Admin or User |
+| `/admin` | **Admin** | Machine sidebar, broadcast controls, 3D preview, info card |
+| `/user` | **User** | Full-screen follower with auto-synced transitions |
 
 ### Workflow
 
-1. Open the app and select **Admin** on one device (PC)
-2. Open the app and select **User** on another device (phone/tablet)
-3. Admin selects a machine → All users instantly see the selected machine's 3D model and data
-4. Machine status changes (Running / Idle / Error) broadcast in real-time
+1. Open `/admin` on one tab/device → see the Line Overview
+2. Open `/user` on another tab/device → see the same Line Overview
+3. **Admin clicks a station** → User's view smoothly transitions to that station's 3D model + specs
+4. **Admin clicks Release** → Both views return to the Line Overview
+5. **Toggle theme** (☀️/🌙) → 3D canvas background and UI switch simultaneously
 
 ---
 
 ## 🎨 Design System
 
-The app uses a custom **cyberpunk industrial theme** with:
+### Dark Mode
+- **Background**: `#0c0c14` — Deep charcoal/navy
+- **Accents**: Neon blue `#00b4ff` · Indigo `#6366f1`
+- **Grid**: Neon-blue glow lines on dark floor
 
-- **Dark Background**: `#0a0a0f` (cyber-bg)
-- **Neon Accents**: Cyan `#00fff5` · Magenta `#ff00ff` · Green `#39ff14`
-- **Status Colors**: Running 🟢 · Idle 🟡 · Error 🔴
-- **Glassmorphism**: Frosted glass panels with backdrop blur
+### Light Mode
+- **Background**: `#f8f9fc` — High-key white studio
+- **Accents**: Blue `#3b82f6` · Soft shadows
+- **Grid**: Professional grey lines
+
+### Shared
 - **Typography**: Orbitron (headings) · Inter (body) · JetBrains Mono (data)
-- **Animations**: Pulse glow, slide-in, fade-in, and 3D model rotation
+- **Animations**: Framer Motion transitions, pulse glow, slide-up
 
 ---
 
@@ -183,11 +200,11 @@ The app uses a custom **cyberpunk industrial theme** with:
 
 | Event | Direction | Payload | Description |
 |-------|-----------|---------|-------------|
-| `SYNC_MACHINE` | Server → Client | `{ machineId }` | Sent on connect with current machine |
-| `SYNC_MACHINE` | Client → Server | `{ machineId }` | Admin broadcasts a machine selection |
-| `SYNC_MACHINE` | Server → All | `{ machineId }` | Rebroadcast to all connected clients |
-| `UPDATE_STATUS` | Client → Server | `{ machineId, status }` | Admin updates a machine's status |
-| `UPDATE_STATUS` | Server → All | `{ machineId, status }` | Rebroadcast status change |
+| `SYNC_STATE` | Server → Client | `{ machineId }` | Current state on connect |
+| `BROADCAST_START` | Client → Server | `{ machineId }` | Admin selects a station |
+| `BROADCAST_START` | Server → All | `{ machineId }` | Rebroadcast to all clients |
+| `RELEASE_CONTROL` | Client → Server | — | Admin releases broadcast |
+| `RELEASE_CONTROL` | Server → All | — | Return everyone to overview |
 
 ---
 
