@@ -55,16 +55,14 @@ export default function AdminView() {
                     {activeMachine && <MachineInfoCard machine={activeMachine} />}
                 </AnimatePresence>
 
+
                 {/* Admin badge */}
                 <div className="absolute bottom-5 left-5">
                     <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full theme-transition ${isDark
                         ? 'bg-accent-purple/10 border border-accent-purple/20'
                         : 'bg-accent-indigo/10 border border-accent-indigo/20'
                         }`}>
-                        <div
-                            className="w-2 h-2 rounded-full animate-pulse-glow"
-                            style={{ backgroundColor: isDark ? '#a855f7' : '#6366f1', boxShadow: `0 0 8px ${isDark ? '#a855f7' : '#6366f1'}` }}
-                        />
+                        <img src="/assets/icons/admin.png" alt="" className="w-4 h-4 object-contain" />
                         <span className={`text-[10px] font-heading uppercase tracking-widest ${isDark ? 'text-accent-purple' : 'text-accent-indigo'}`}>
                             Admin Mode
                         </span>

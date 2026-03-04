@@ -31,7 +31,7 @@ export default function AdminSidebar() {
                             ? 'bg-accent-purple/10 border border-accent-purple/20'
                             : 'bg-accent-indigo/10 border border-accent-indigo/20'
                             }`}>
-                            <span className="text-lg">🛡️</span>
+                            <img src="/assets/icons/admin.png" alt="Admin" className="w-5 h-5 object-contain" />
                         </div>
                         <div>
                             <h2 className={`font-heading text-xs tracking-wider ${isDark ? 'text-white' : 'text-lt-text'}`}>
@@ -106,7 +106,7 @@ export default function AdminSidebar() {
                                             borderLeft: `3px solid ${machine.color}`,
                                         }}
                                     >
-                                        {machine.icon}
+                                        <img src={machine.icon} alt="" className="w-5 h-5 object-contain" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">

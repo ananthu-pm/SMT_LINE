@@ -34,7 +34,7 @@ export default function MachineInfoCard({ machine }) {
             <div className="p-5">
                 {/* Title + Status */}
                 <div className="flex items-start gap-3 mb-4">
-                    <span className="text-2xl mt-0.5">{machine.icon}</span>
+                    <img src={machine.icon} alt="" className="w-8 h-8 object-contain mt-0.5" />
                     <div className="flex-1">
                         <h3 className={`font-heading text-sm tracking-wide ${isDark ? 'text-white' : 'text-lt-text'}`}>
                             {machine.name}

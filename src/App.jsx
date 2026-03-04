@@ -16,6 +16,11 @@ function LandingPage() {
     return (
         <div className={`h-screen w-screen flex items-center justify-center transition-colors duration-500 ${isDark ? 'bg-dt-bg' : 'bg-lt-bg'}`}>
             <div className="text-center space-y-8 animate-fade-in">
+                {/* L&T Company Logo — top left */}
+                <div className="absolute top-4 left-5 z-20">
+                    <img src="/assets/lt-logo.png" alt="L&T" className="object-contain" style={{ height: '60px', filter: isDark ? 'brightness(1.5)' : 'none' }} />
+                </div>
+
                 {/* Theme toggle */}
                 <div className="absolute top-6 right-6">
                     <ThemeToggle />
@@ -27,7 +32,7 @@ function LandingPage() {
                         ? 'bg-gradient-to-br from-neon-blue/20 to-accent-indigo/20 border border-neon-blue/20'
                         : 'bg-gradient-to-br from-accent-blue/10 to-accent-indigo/10 border border-accent-blue/20'
                         }`}>
-                        <span className="text-4xl">⚡</span>
+                        <img src="/lt-favicon.png" alt="L&T" className="w-12 h-12 object-contain" />
                     </div>
                     <h1 className={`font-heading text-3xl tracking-widest ${isDark ? 'text-white' : 'text-lt-text'}`}>
                         SMT <span className={isDark ? 'text-neon-blue' : 'text-accent-blue'}>DIGITAL TWIN</span>
@@ -46,7 +51,7 @@ function LandingPage() {
                             : 'border-accent-indigo/20 bg-accent-indigo/5 hover:bg-accent-indigo/10 hover:shadow-md'
                             }`}
                     >
-                        <div className={`font-heading text-sm tracking-wider uppercase ${isDark ? 'text-accent-purple' : 'text-accent-indigo'}`}>🛡️ Admin</div>
+                        <div className={`font-heading text-sm tracking-wider uppercase flex items-center gap-2 ${isDark ? 'text-accent-purple' : 'text-accent-indigo'}`}><img src="/assets/icons/admin.png" alt="" className="w-5 h-5 object-contain" /> Admin</div>
                         <div className={`text-xs mt-2 ${isDark ? 'text-white/30' : 'text-lt-muted'}`}>Master Control</div>
                     </Link>
 
@@ -57,7 +62,7 @@ function LandingPage() {
                             : 'border-accent-blue/20 bg-accent-blue/5 hover:bg-accent-blue/10 hover:shadow-md'
                             }`}
                     >
-                        <div className={`font-heading text-sm tracking-wider uppercase ${isDark ? 'text-neon-blue' : 'text-accent-blue'}`}>👁 User</div>
+                        <div className={`font-heading text-sm tracking-wider uppercase flex items-center gap-2 ${isDark ? 'text-neon-blue' : 'text-accent-blue'}`}><img src="/assets/icons/user.png" alt="" className="w-5 h-5 object-contain" /> User</div>
                         <div className={`text-xs mt-2 ${isDark ? 'text-white/30' : 'text-lt-muted'}`}>Follower View</div>
                     </Link>
                 </div>
