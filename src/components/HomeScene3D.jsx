@@ -4,10 +4,11 @@
 
 import React, { Suspense, useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF, Html } from '@react-three/drei';
+import { OrbitControls, useGLTF, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useTheme } from '../context/ThemeContext';
 import ErrorBoundary from './ErrorBoundary';
+import FactoryEnvironment from '../3d/environment/FactoryEnvironment';
 
 const OVERVIEW_MODEL = '/models/automated_pcb_assembly_line.glb';
 
@@ -23,6 +24,21 @@ function GLBModel({ url, onModelLoaded }) {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
+
+                // Fix white/light materials appearing as metallic grey
+                if (child.material) {
+                    const mat = child.material;
+                    if (mat.color) {
+                        const luminance = mat.color.r * 0.299 + mat.color.g * 0.587 + mat.color.b * 0.114;
+                        if (luminance > 0.6) {
+                            mat.metalness = 0;
+                            mat.roughness = Math.max(mat.roughness, 0.6);
+                            mat.color.r = Math.min(mat.color.r * 1.15, 1.0);
+                            mat.color.g = Math.min(mat.color.g * 1.15, 1.0);
+                            mat.color.b = Math.min(mat.color.b * 1.15, 1.0);
+                        }
+                    }
+                }
             }
         });
         return clone;
@@ -117,32 +133,12 @@ function LoadingIndicator3D() {
 function SceneContent({ isDark, onModelLoaded }) {
     return (
         <>
-            <ambientLight intensity={isDark ? 0.35 : 1.0} />
-            <directionalLight position={[8, 10, 5]} intensity={isDark ? 0.8 : 1.2} castShadow shadow-mapSize={[2048, 2048]} />
-            {isDark && (
-                <>
-                    <pointLight position={[-4, 3, -3]} intensity={0.4} color="#00b4ff" />
-                    <pointLight position={[4, 2, -3]} intensity={0.2} color="#6366f1" />
-                </>
-            )}
-            {!isDark && (
-                <>
-                    <pointLight position={[0, 5, 5]} intensity={0.4} color="#ffffff" />
-                    <pointLight position={[-4, 6, -4]} intensity={0.3} color="#ffffff" />
-                </>
-            )}
+            <FactoryEnvironment isDark={isDark} floorY={-0.25} />
 
             <Suspense fallback={<LoadingIndicator3D />}>
                 <GLBModel url={OVERVIEW_MODEL} onModelLoaded={onModelLoaded} />
             </Suspense>
 
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.25, 0]} receiveShadow>
-                <planeGeometry args={[50, 50]} />
-                <meshStandardMaterial color={isDark ? '#0e0e1a' : '#dfe2e6'} metalness={isDark ? 0.7 : 0.0} roughness={isDark ? 0.4 : 0.9} />
-            </mesh>
-            <gridHelper args={[50, 50, isDark ? '#1a1a30' : '#c8ccd2', isDark ? '#1a1a30' : '#c8ccd2']} position={[0, -0.24, 0]} />
-            <ContactShadows position={[0, -0.24, 0]} opacity={isDark ? 0.5 : 0.15} scale={20} blur={2.5} far={5} />
-            <Environment preset={isDark ? 'night' : 'city'} />
             <OrbitControls enableDamping dampingFactor={0.05} minDistance={3} maxDistance={20} maxPolarAngle={Math.PI / 2.1} autoRotate autoRotateSpeed={0.3} target={[0, 0, 0]} />
         </>
     );
@@ -161,7 +157,7 @@ export default function HomeScene3D({ onModelLoaded }) {
                     shadows
                     gl={{ antialias: true, alpha: false }}
                     onCreated={({ gl }) => {
-                        gl.setClearColor(isDark ? '#0c0c14' : '#e8eaed');
+                        gl.setClearColor(isDark ? '#0c0c14' : '#f0f1f3');
                         gl.toneMapping = THREE.ACESFilmicToneMapping;
                         gl.toneMappingExposure = isDark ? 1.0 : 1.6;
                     }}

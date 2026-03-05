@@ -6,7 +6,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import useMachineStore from '../store/useMachineStore';
 import { useTheme } from '../context/ThemeContext';
-import ThemeToggle from './ThemeToggle';
+
 
 export default function AdminSidebar() {
     const machines = useMachineStore((s) => s.machines);
@@ -42,7 +42,7 @@ export default function AdminSidebar() {
                             </p>
                         </div>
                     </div>
-                    <ThemeToggle />
+
                 </div>
 
                 {/* Connection + Release */}

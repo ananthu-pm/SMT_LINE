@@ -2,7 +2,7 @@
 
 # ⚡ SMT Line Digital Twin
 
-### Synchronized 3D Monitoring with Master-Follower Architecture
+### L&T Smart Manufacturing — Synchronized 3D Monitoring
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![Three.js](https://img.shields.io/badge/Three.js-r170-000000?style=flat-square&logo=threedotjs&logoColor=white)](https://threejs.org)
@@ -11,7 +11,7 @@
 [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF0055?style=flat-square&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 
-A dual-theme web application for visualizing and controlling a 15-station SMT production line through interactive 3D digital twins with real-time synchronization between Admin (Master) and User (Follower) views.
+A web application for visualizing and controlling a 15-station SMT production line through interactive 3D digital twins with real-time synchronization between Admin (Master) and User (Follower) views, featuring a realistic factory shop floor environment.
 
 </div>
 
@@ -21,12 +21,15 @@ A dual-theme web application for visualizing and controlling a 15-station SMT pr
 
 - **15 SMT Stations** — Each with a custom `.glb` 3D model, unique specs, and color-coded identity
 - **Master-Follower Architecture** — Admin broadcasts a station → all connected Users instantly transition to that station's 3D view
-- **Dual Theme** — Dark mode (navy/charcoal with neon-blue accents) and Light mode (white studio with professional grey/blue)
-- **Custom 3D Models** — Hand-made `.glb` models loaded via React Three Fiber with auto-scaling and shadow support
+- **Realistic Factory Environment** — Enclosed shop floor with walls, door opening, yellow safety markings, EXIT sign, and wall-mounted 3D TV screens
+- **3D TV Monitors** — 5 GLB TV models mounted on factory walls displaying dashboards
+- **Robot Assistant** — Animated AI assistant with per-machine audio narration
+- **Custom 3D Models** — `.glb` models loaded via React Three Fiber with auto-scaling, white-color correction, and shadow support
 - **Line Overview** — Interactive 3D overview of the entire assembly line on the home page
 - **Smooth Transitions** — Framer Motion animations for view switching, info cards, and UI elements
 - **Real-Time Sync** — Socket.io powered broadcast/release control with live connection status
-- **Release Control** — Admin can release broadcast, returning all followers to the line overview
+- **L&T Branding** — Company logo on landing page and user view
+- **Custom Machine Icons** — Each station has a unique icon replacing default emojis
 
 ---
 
@@ -42,7 +45,7 @@ A dual-theme web application for visualizing and controlling a 15-station SMT pr
 | 6 | **Reject Conveyor 1** | Faulty board segregation | `smt_conveyor.glb` |
 | 7 | **Surface Mounter** | FUJI AIMEX III | `fuji_aimex_iii_smd_mounter.glb` |
 | 8 | **Inspection Conveyor** | Visual check station | `smt_conveyor.glb` |
-| 9 | **Pre AOI** | Magic Ray | `aoi_kohyoung.glb` |
+| 9 | **Pre AOI** | KohYoung Zenith Alpha 3D AOI | `aoi_kohyoung.glb` |
 | 10 | **Reject Conveyor 2** | Mid-line reject | `smt_conveyor.glb` |
 | 11 | **Reflow Oven** | Heller 1937 MK 7 | `heller_1936_mk7_wave_soldering_machine.glb` |
 | 12 | **Cooling Conveyor** | Rapid board cooling | `cooling_conveyor.glb` |
@@ -63,7 +66,7 @@ A dual-theme web application for visualizing and controlling a 15-station SMT pr
 | **Animations** | Framer Motion |
 | **State** | Zustand |
 | **Real-Time** | Socket.io (Client + Server) |
-| **Styling** | Tailwind CSS 3.4 (dual-theme) |
+| **Styling** | Tailwind CSS 3.4 |
 | **Routing** | React Router DOM v6 |
 | **Backend** | Node.js + Express |
 | **Fonts** | Orbitron · Inter · JetBrains Mono |
@@ -74,14 +77,22 @@ A dual-theme web application for visualizing and controlling a 15-station SMT pr
 
 ```
 smt-digital-twin/
-├── index.html                  # Entry HTML (dark class for theme)
+├── index.html                  # Entry HTML
 ├── package.json                # Dependencies & scripts
 ├── vite.config.js              # Vite config with Socket.io proxy
-├── tailwind.config.js          # Dual-theme color palettes
+├── tailwind.config.js          # Theme color palettes
 ├── postcss.config.js           # PostCSS plugins
 │
 ├── public/
-│   └── models/                 # 9 custom .glb 3D models
+│   ├── models/                 # 9 custom .glb 3D machine models
+│   ├── assets/
+│   │   ├── tv/                 # 5 TV GLB models (wall-mounted)
+│   │   ├── icons/              # Custom machine & UI icons
+│   │   ├── audio/              # Per-machine audio narration files
+│   │   ├── lt-logo.png         # L&T company logo
+│   │   ├── robot.gif           # Animated robot assistant
+│   │   └── robot-still.png     # Robot static image
+│   └── lt-favicon.png          # App favicon
 │
 ├── server/
 │   ├── index.js                # Express + Socket.io server
@@ -90,30 +101,35 @@ smt-digital-twin/
 └── src/
     ├── main.jsx                # Entry with ThemeProvider
     ├── App.jsx                 # Router: Landing → Admin / User
-    ├── index.css               # Dual-theme styles & glassmorphism
+    ├── index.css               # Theme styles & glassmorphism
+    │
+    ├── 3d/
+    │   └── environment/
+    │       └── FactoryEnvironment.jsx  # Factory walls, floor, TVs, EXIT sign
     │
     ├── context/
-    │   └── ThemeContext.jsx     # Global Light/Dark theme context
+    │   └── ThemeContext.jsx     # Light theme context
     │
     ├── components/
-    │   ├── HomeScene3D.jsx     # 3D line overview (GLB model)
+    │   ├── HomeScene3D.jsx      # 3D line overview (GLB model)
     │   ├── MachineDetailScene.jsx  # Per-machine GLB 3D view
-    │   ├── MachineInfoCard.jsx # Themed spec overlay card
-    │   ├── AdminSidebar.jsx    # 15-machine list + broadcast
-    │   └── ThemeToggle.jsx     # Sun/Moon toggle button
+    │   ├── MachineInfoCard.jsx  # Spec overlay card
+    │   ├── AdminSidebar.jsx     # 15-machine list + broadcast
+    │   ├── RobotAssistant.jsx   # AI robot with audio narration
+    │   └── ErrorBoundary.jsx    # Error handling
     │
     ├── views/
-    │   ├── AdminView.jsx       # Sidebar + 3D + broadcast banner
-    │   └── UserView.jsx        # Full-screen follower mode
+    │   ├── AdminView.jsx        # Sidebar + 3D + broadcast banner
+    │   └── UserView.jsx         # Full-screen follower mode
     │
     ├── data/
-    │   └── machines.js         # 15-station database with model paths
+    │   └── machines.js          # 15-station database with model paths
     │
     ├── store/
-    │   └── useMachineStore.js  # Zustand store + socket listeners
+    │   └── useMachineStore.js   # Zustand store + socket listeners
     │
     └── socket/
-        └── socket.js           # Socket.io client singleton
+        └── socket.js            # Socket.io client singleton
 ```
 
 ---
@@ -166,7 +182,7 @@ npm run server    # Backend (Socket.io on port 4000)
 |-------|------|-------------|
 | `/` | **Landing** | Role selection — Admin or User |
 | `/admin` | **Admin** | Machine sidebar, broadcast controls, 3D preview, info card |
-| `/user` | **User** | Full-screen follower with auto-synced transitions |
+| `/user` | **User** | Full-screen follower with auto-synced transitions + robot assistant |
 
 ### Workflow
 
@@ -174,25 +190,20 @@ npm run server    # Backend (Socket.io on port 4000)
 2. Open `/user` on another tab/device → see the same Line Overview
 3. **Admin clicks a station** → User's view smoothly transitions to that station's 3D model + specs
 4. **Admin clicks Release** → Both views return to the Line Overview
-5. **Toggle theme** (☀️/🌙) → 3D canvas background and UI switch simultaneously
 
 ---
 
-## 🎨 Design System
+## 🏗️ Factory Environment
 
-### Dark Mode
-- **Background**: `#0c0c14` — Deep charcoal/navy
-- **Accents**: Neon blue `#00b4ff` · Indigo `#6366f1`
-- **Grid**: Neon-blue glow lines on dark floor
+The 3D scene features a realistic enclosed SMT shop floor:
 
-### Light Mode
-- **Background**: `#f8f9fc` — High-key white studio
-- **Accents**: Blue `#3b82f6` · Soft shadows
-- **Grid**: Professional grey lines
-
-### Shared
-- **Typography**: Orbitron (headings) · Inter (body) · JetBrains Mono (data)
-- **Animations**: Framer Motion transitions, pulse glow, slide-up
+- **White industrial floor** — Clean, no grid
+- **4 walls** — Back, Left, Right, Front (with door opening)
+- **Yellow safety markings** — Rectangular work zone boundary
+- **5 wall-mounted 3D TVs** — Dashboard monitors on back, left, and right walls
+- **"EXIT" sign** — Red sign with white text above the front door
+- **"L&T SMT SHOP FLOOR - ZONE B"** — Wall signage text
+- **Professional lighting** — Ambient, directional, hemisphere, and fill lights
 
 ---
 

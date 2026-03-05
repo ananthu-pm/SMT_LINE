@@ -25,3 +25,6 @@ npm-debug.log*
 
 # Resource (original GLB source — copies live in public/models/)
 Resource/
+
+# Gemini AI workspace
+.gemini/

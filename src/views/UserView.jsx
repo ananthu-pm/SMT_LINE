@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import HomeScene3D from '../components/HomeScene3D';
 import MachineDetailScene from '../components/MachineDetailScene';
 import MachineInfoCard from '../components/MachineInfoCard';
-import ThemeToggle from '../components/ThemeToggle';
+
 import RobotAssistant from '../components/RobotAssistant';
 import useMachineStore from '../store/useMachineStore';
 import { useTheme } from '../context/ThemeContext';
@@ -113,10 +113,7 @@ export default function UserView() {
                 <img src="/assets/lt-logo.png" alt="L&T" className="object-contain" style={{ height: '60px', filter: isDark ? 'brightness(1.5)' : 'none' }} />
             </div>
 
-            {/* Theme toggle — top right */}
-            <div className="absolute top-5 right-5">
-                <ThemeToggle />
-            </div>
+
 
             {/* Robot Assistant — bottom left */}
             <RobotAssistant

@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import AdminView from './views/AdminView';
 import UserView from './views/UserView';
 import { useTheme } from './context/ThemeContext';
-import ThemeToggle from './components/ThemeToggle';
+
 
 function LandingPage() {
     const { theme } = useTheme();
@@ -21,10 +21,7 @@ function LandingPage() {
                     <img src="/assets/lt-logo.png" alt="L&T" className="object-contain" style={{ height: '60px', filter: isDark ? 'brightness(1.5)' : 'none' }} />
                 </div>
 
-                {/* Theme toggle */}
-                <div className="absolute top-6 right-6">
-                    <ThemeToggle />
-                </div>
+
 
                 {/* Logo / Title */}
                 <div className="space-y-4">

@@ -109,7 +109,7 @@ export const machines = [
         shortName: 'Pre AOI',
         icon: '/assets/icons/aoi.png',
         color: '#9575cd',
-        description: 'Magic Ray Pre-Reflow Inspection',
+        description: 'KohYoung Zenith Alpha 3D AOI',
         specs: ['Component presence check', 'Reduces post-reflow rework'],
         position: 9,
         status: 'running',

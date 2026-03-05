@@ -2,22 +2,19 @@
 //  ThemeContext — Global Light/Dark Mode
 // ──────────────────────────────────────────────────
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-    const [theme, setTheme] = useState(() => {
-        return localStorage.getItem('smt-theme') || 'dark';
-    });
+    const theme = 'light';
 
     useEffect(() => {
-        localStorage.setItem('smt-theme', theme);
         document.documentElement.classList.remove('light', 'dark');
-        document.documentElement.classList.add(theme);
-    }, [theme]);
+        document.documentElement.classList.add('light');
+    }, []);
 
-    const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+    const toggleTheme = () => { }; // No-op — dark mode removed
 
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
